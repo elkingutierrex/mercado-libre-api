@@ -22,22 +22,30 @@ router.get('/getItemsByQuery', async(req, res) => {
     if ( !queryString){
         return false;
     }
-    const response = await fetch(`${urlBase}sites/MLA/search?${queryString}`);
+    const response = await fetch(`${urlBase}sites/MLA/search?${queryString}`)
     const users = await response.json();
     res.json(users);
 })
 
 router.get('/getItemById', async(req, res) => {
-    const id = req.query.id
+    const id = req.query.id.toString();
     if ( !id ){
         return false;
     }
-    const response = await fetch(`${urlBase}items/${id}`); //MLA1109059186
-    const users = await response.json();
-    console.log(users);
-    res.json(users);
+    const response = await fetch(`${urlBase}items/${id}`); 
+    const item = await response.json(); 
+    res.json(item);
 })
 
-// https://api.mercadolibre.com/items/MLA1109059186
+router.get('/getDescriptionItemById', async(req, res) => {
+    const id = req.query.id.toString();
+    if ( !id ){
+        return false;
+    }
+    const response = await fetch(`${urlBase}items/${id}/description`); 
+    const item = await response.json();
+ 
+    res.json(item);
+})
 
 module.exports = router;
