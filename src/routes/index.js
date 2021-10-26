@@ -19,33 +19,64 @@ function getQueryString( query ){
 router.get('/getItemsByQuery', async(req, res) => {
     const queryString = getQueryString( req.query ); 
 
-    if ( !queryString){
-        return false;
+    if ( !queryString ){
+     const msgError = {
+            "message": "No se recibio el nombre del producto a buscar",
+            "error": "not_found",
+            "status": 404,
+        }
+        return await res.json( msgError );
     }
-    const response = await fetch(`${urlBase}sites/MLA/search?${queryString}`)
-    const users = await response.json();
-    res.json(users);
+
+    try{
+        const response = await fetch(`${urlBase}sites/MLA/search?${queryString}`);
+        const item = await response.json(); 
+        await res.json(item);
+    }catch(err){
+        await res.json(err)
+    }
+ 
+
 })
 
 router.get('/getItemById', async(req, res) => {
-    const id = req.query.id.toString();
+    const id = req.query.id.toString();    
     if ( !id ){
-        return false;
+        const msgError = {
+            "message": "No se recibio id del item a buscar",
+            "error": "not_found",
+            "status": 404,
+        }
+        return await res.json( msgError );
     }
-    const response = await fetch(`${urlBase}items/${id}`); 
-    const item = await response.json(); 
-    res.json(item);
+
+    try{
+        const response = await fetch(`${urlBase}items/${id}`);
+        const item = await response.json(); 
+        await res.json(item);
+    }catch(err){
+        await res.json(err)
+    }
 })
 
 router.get('/getDescriptionItemById', async(req, res) => {
     const id = req.query.id.toString();
     if ( !id ){
-        return false;
+        const msgError = {
+            "message": "No se recibio id del item a buscar",
+            "error": "not_found",
+            "status": 404,
+        }
+        return await res.json( msgError );
     }
-    const response = await fetch(`${urlBase}items/${id}/description`); 
-    const item = await response.json();
- 
-    res.json(item);
+
+    try{
+        const response = await fetch(`${urlBase}items/${id}/description`); 
+        const item = await response.json();
+        await res.json(item);
+    }catch(err){
+        await res.json(err);
+    }   
 })
 
 module.exports = router;
